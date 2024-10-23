@@ -13,6 +13,8 @@ The Spreadsheet Management Service is a Ruby on Rails application that integrate
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Docker Setup](#docker-setup)
+- [Linting](#linting)
+- [Testing](#testing)
 - [Error Handling](#error-handling)
 
 ## Features
@@ -137,8 +139,8 @@ The Spreadsheet Management Service is a Ruby on Rails application that integrate
     ```
 
 3. Set up Google Sheets API credentials:
-    - Create a .env file to match the env.sample file in the root directory.
-    -Add your Google Service Account json credentials obtained from the google console and other environment variables:
+    - Create a `.env` file in the root directory and ensure it follows the structure of the `env.sample` file.
+    - Add your Google Service Account json credentials obtained from the google console and other environment variables:
     ```sh
         GOOGLE_SHEET_KEY=<your-google-sheet-key>
         GOOGLE_SHEET_TITLE=<your-google-sheet-title>
@@ -150,7 +152,7 @@ The Spreadsheet Management Service is a Ruby on Rails application that integrate
     rails server
     ```
 
-### Docker Setup
+### Docker Setup (Optional)
 If you prefer to use Docker, follow these steps:
 
 1. Build the Docker image and start the container using the development configuration:
@@ -158,6 +160,35 @@ If you prefer to use Docker, follow these steps:
    docker-compose -f docker-compose.dev.yml up
     ```
 - This command builds the Docker image and starts the application in a container using the docker-compose.dev.yml configuration file.
+
+## Linting
+To ensure code quality and consistency, you can use RuboCop for linting.
+
+1. Run RuboCop to lint your code and see the files with issues:
+  ```sh
+  rubocop
+  ```
+2. 2. To automatically fix linting issues, run RuboCop with the `-A` (auto-correct) option:
+  ```sh
+  rubocop -A
+  ```
+
+## Testing
+To run the test suite, use the following command:
+
+1. Run all tests:
+  ```sh
+  rails test  
+  ```
+2. Run a specific test file:
+  ```sh
+  rails test <path/to/test/file>
+  ```
+  Example:
+  ```sh
+  rails test test/controllers/records_controller_test.rb
+  ```
+  
 
 ## Error Handling
 - **StandardError**: Triggered by unexpected system errors or issues in external API calls, returning a `500 Internal Server Error`.
@@ -168,6 +199,8 @@ If you prefer to use Docker, follow these steps:
 - **Features**: Describes the main features of the application.
 - **Endpoints**: Provides details about the available API endpoints, including parameters and responses.
 - **Setup**: Instructions for setting up the application, including prerequisites and installation steps.
+- **Linting**: Instructions for linting the code using RuboCop.
+- **Testing**: Instructions for running the test suite.
 - **Error Handling**: Describes how errors are handled in the application.
 
 This README file provides a comprehensive overview of the application, its features, and how to set it up and use it.
