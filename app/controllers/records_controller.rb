@@ -1,3 +1,25 @@
+#
+# RecordsController handles CRUD operations for records stored in a Google Sheets document.
+# 
+# Actions:
+# - index: Fetches and returns paginated records from the Google Sheets document.
+# - create: Adds a new record to the Google Sheets document.
+# - destroy_by_attributes: Deletes records from the Google Sheets document based on provided attributes.
+#
+# Before Actions:
+# - skip_before_action :verify_authenticity_token: Disables CSRF protection for create and destroy_by_attributes actions.
+#
+# Rescue From:
+# - StandardError: Handles generic errors and returns a 500 internal server error response.
+# - ArgumentError: Handles argument-related errors and returns a 422 unprocessable entity response.
+#
+# Private Methods:
+# - google_sheets_service: Initializes and returns an instance of GoogleSheetsService.
+# - handle_standard_error: Logs and handles generic errors.
+# - handle_argument_error: Logs and handles argument-related errors.
+# - destroy_record_params: Permits and returns the parameters required for deleting a record.
+# - create_record_params: Permits and returns the parameters required for creating a new record.
+
 class RecordsController < ApplicationController
   # Disable CSRF protection for this controller because we are not using forms
   skip_before_action :verify_authenticity_token, only: [:create, :destroy_by_attributes]
@@ -13,8 +35,15 @@ class RecordsController < ApplicationController
 
       result = google_sheets_service.fetch_records_from_sheet(page, per_page)
       records = result[:records]
+      total_records = result[:total_records]
+      
+      pagination = {
+        page: page,
+        per_page: per_page,
+        total_records: total_records
+      }
       Rails.logger.info("Records fetched: #{records.inspect}")
-      render json: { records: records }, status: :ok
+      render json: { records: records, pagination: pagination }, status: :ok
   end
 
   def create

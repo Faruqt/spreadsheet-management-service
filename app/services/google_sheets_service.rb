@@ -5,10 +5,10 @@ require 'stringio'
 class GoogleSheetsService
   # Initializes a new instance of the GoogleSheetsService.
   #
-  # @raise [RuntimeError] if the GOOGLE_SHEETS_CREDENTIALS environment variable is not set.
+  # @raise [RuntimeError] if the GOOGLE_SERVICE_ACCOUNT_CREDENTIALS environment variable is not set.
   def initialize
-    credentials_json = ENV['GOOGLE_SHEETS_CREDENTIALS']
-    raise "GOOGLE_SHEETS_CREDENTIALS environment variable not set" unless credentials_json
+    credentials_json = ENV['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS']
+    raise "GOOGLE_SERVICE_ACCOUNT_CREDENTIALS environment variable not set" unless credentials_json
 
     credentials = JSON.parse(credentials_json)
     @session = GoogleDrive::Session.from_service_account_key(StringIO.new(credentials_json))
@@ -98,7 +98,8 @@ class GoogleSheetsService
       Rails.logger.info("Records fetched: #{records.inspect}")
       {
         keys: keys,
-        records: records
+        records: records,
+        total_records: rows.length - 1
       }
     rescue StandardError => e
       Rails.logger.error("Failed to fetch records: #{e.message}")
