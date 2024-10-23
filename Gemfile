@@ -63,5 +63,5 @@ end
 
 group :test do
   # Use Minitest for unit tests [https://guides.rubyonrails.org/testing.html#unit-testing]
-  gem 'mocha', require: false
+  gem "mocha", require: false
 end

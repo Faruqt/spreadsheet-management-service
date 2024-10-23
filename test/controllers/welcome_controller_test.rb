@@ -7,7 +7,7 @@ class WelcomeControllerTest < ActionDispatch::IntegrationTest
 
     # Assert that the response was successful
     assert_response :success
-    
+
     # Assert that the response body contains the welcome text
     assert_select "h1", "Welcome to the sheet management service"
   end
