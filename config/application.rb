@@ -17,7 +17,7 @@ module SpreadsheetManagementService
     config.autoload_lib(ignore: %w[assets tasks])
 
     # Ensure the services directory is autoloaded
-    config.autoload_paths += %W(#{config.root}/app/services)
+    config.autoload_paths += %W[#{config.root}/app/services]
 
     # Configuration for the application, engines, and railties goes here.
     #

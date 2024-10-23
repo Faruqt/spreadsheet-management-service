@@ -1,19 +1,19 @@
-require 'google_drive'
-require 'json'
-require 'stringio'
+require "google_drive"
+require "json"
+require "stringio"
 
 class GoogleSheetsService
   # Initializes a new instance of the GoogleSheetsService.
   #
   # @raise [RuntimeError] if the GOOGLE_SERVICE_ACCOUNT_CREDENTIALS environment variable is not set.
   def initialize
-    credentials_json = ENV['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS']
+    credentials_json = ENV["GOOGLE_SERVICE_ACCOUNT_CREDENTIALS"]
     raise "GOOGLE_SERVICE_ACCOUNT_CREDENTIALS environment variable not set" unless credentials_json
 
     credentials = JSON.parse(credentials_json)
     @session = GoogleDrive::Session.from_service_account_key(StringIO.new(credentials_json))
-    @spreadsheet_key = ENV['GOOGLE_SHEET_KEY']
-    @worksheet_title = ENV['GOOGLE_SHEET_TITLE']
+    @spreadsheet_key = ENV["GOOGLE_SHEET_KEY"]
+    @worksheet_title = ENV["GOOGLE_SHEET_TITLE"]
   end
 
   # Reads all rows from a specified worksheet in the spreadsheet.
@@ -60,13 +60,13 @@ class GoogleSheetsService
   # @raise [GoogleDrive::Error] if the row cannot be deleted.
   def delete_row(spreadsheet_key, worksheet_title, row_number)
     worksheet = find_worksheet(spreadsheet_key, worksheet_title)
-    worksheet.delete_rows(row_number, 1) 
+    worksheet.delete_rows(row_number, 1)
     worksheet.save
   end
 
   # Fetch records from the Google Sheet
   # @return [Hash] A hash containing the keys and records
-  def fetch_records_from_sheet(page=nil, per_page=nil)
+  def fetch_records_from_sheet(page = nil, per_page = nil)
     begin
       # Read data from the Google Sheet
       rows = read_sheet(@spreadsheet_key, @worksheet_title)
@@ -131,7 +131,7 @@ class GoogleSheetsService
 
     begin
       # Append the new row to the sheet
-      write_sheet(@spreadsheet_key, @worksheet_title, [@new_row])
+      write_sheet(@spreadsheet_key, @worksheet_title, [ @new_row ])
       Rails.logger.info("New row added: #{@new_row.inspect}")
       true
     rescue StandardError => e
@@ -156,12 +156,12 @@ class GoogleSheetsService
 
     # Find the row number of the record to be deleted from the bottom up
     row_number = records.rindex do |record|
-      record['Date'] == delete_params[:date] &&
-        record['Description'] == delete_params[:description] &&
-        record['Category'] == delete_params[:category] &&
-        record['Sub Category'] == delete_params[:sub_category] &&
-        record['Amount'].to_s == delete_params[:amount].to_s &&  # Convert amount to string for comparison
-        record['Remark'] == delete_params[:remark]
+      record["Date"] == delete_params[:date] &&
+        record["Description"] == delete_params[:description] &&
+        record["Category"] == delete_params[:category] &&
+        record["Sub Category"] == delete_params[:sub_category] &&
+        record["Amount"].to_s == delete_params[:amount].to_s &&  # Convert amount to string for comparison
+        record["Remark"] == delete_params[:remark]
     end
 
     row_number
@@ -199,7 +199,7 @@ class GoogleSheetsService
   private
 
   # Finds a worksheet by its title in the specified spreadsheet.
-  # 
+  #
   # @param spreadsheet_key [String] The key of the spreadsheet.
   # @param worksheet_title [String] The title of the worksheet.
   # @return [GoogleDrive::Worksheet] The found worksheet.
@@ -210,16 +210,15 @@ class GoogleSheetsService
   end
 
   # Validate the record parameters
-  # 
+  #
   # @param record_params [Hash] The parameters to be validated
   # record_params should be a hash with the following keys:
   # :date, :description, :category, :sub_category, :amount, :remark
   # @return [Boolean] True if the parameters are valid, False otherwise
   def validate_record_params(record_params)
-    required_keys = [:date, :description, :category, :sub_category, :amount, :remark]
+    required_keys = [ :date, :description, :category, :sub_category, :amount, :remark ]
     missing_keys = required_keys - record_params.keys
 
     missing_keys.empty?
   end
-
 end
