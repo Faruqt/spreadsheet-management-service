@@ -60,3 +60,8 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+group :test do
+  # Use Minitest for unit tests [https://guides.rubyonrails.org/testing.html#unit-testing]
+  gem 'mocha', require: false
+end
