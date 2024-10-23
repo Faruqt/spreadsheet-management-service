@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spreadsheet-management-service
+  labels:
+    app: spreadsheet-management-service
+spec:
+  replicas: 3  # Number of instances (pods)
+  selector:
+    matchLabels:
+      app: spreadsheet-management-service
+  template:
+    metadata:
+      labels:
+        app: spreadsheet-management-service
+    spec:
+      containers:
+      - name: app-container
+        image: spreadsheet-management-app:latest  # Use the image created by the Dockerfile
+        imagePullPolicy: Never  # Ensure Kubernetes uses the local image
+        ports:
+        - containerPort: 3000  # Port exposed in the Dockerfile
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
